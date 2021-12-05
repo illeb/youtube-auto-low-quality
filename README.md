@@ -1,4 +1,4 @@
-# <img src="public/icons/icon_48.png" width="45" align="left"> Youtube auto low quality
+# <img src="public/icons/icon_128.png" width="45" align="left"> Youtube auto low quality
 ## What?
 
 This extension that sets all the background youtube tabs at lowest quality. Yeah, that's it
