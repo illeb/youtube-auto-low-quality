@@ -1,21 +1,29 @@
-'use strict';
+const activeScripts = new Map();
+const addYoutubeKeeper = (id) => {
+  if(activeScripts.has(id))
+    return;
+  chrome.scripting.executeScript(
+    {
+      target: {tabId: id},
+      files: ['contentScript.js']
+    }
+  );
+  activeScripts.set(id, true);
+};
 
-// With background scripts you can communicate with popup
-// and contentScript files.
-// For more information on background script,
-// See https://developer.chrome.com/extensions/background_pages
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === 'GREETINGS') {
-    const message = `Hi ${
-      sender.tab ? 'Con' : 'Pop'
-    }, my name is Bac. I am from Background. It's great to hear from you.`;
-
-    // Log message coming from the `request` parameter
-    console.log(request.payload.message);
-    // Send a response message
-    sendResponse({
-      message,
-    });
-  }
+chrome.runtime.onInstalled.addListener(() => {
+  // run the script for every already open youtube tab
+  chrome.tabs.query({
+    audible: true,
+    active: false,
+    discarded: false,
+    url: 'https://www.youtube.com/*'
+  }).then((tabs) => tabs.forEach(({id}) => addYoutubeKeeper(id)))
+  
+  // for every new loaded tab in youtube site, add the script to run
+  chrome.tabs.onUpdated.addListener((id, changeInfo, {url}) => {
+    if (changeInfo.status == 'complete' && /(https:\/\/www.youtube.com\/)+.*/g.test(url))
+      addYoutubeKeeper(id);
+  })
 });
+

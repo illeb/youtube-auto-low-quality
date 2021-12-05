@@ -1,43 +1,28 @@
-'use strict';
+setInterval(async () => {
+  // let's run the script only when the current youtube tab is in background, and the url is from youtube
+  if(document.visibilityState === 'visible' || !/(https:\/\/www.youtube.com\/)+.*/g.test(document.URL))
+    return;
+  const waitFor = (delay) => new Promise(resolve => setTimeout(resolve, delay));
 
-// Content script file will run in the context of web page.
-// With content script you can manipulate the web pages using
-// Document Object Model (DOM).
-// You can also pass information to the parent extension.
+  // clicks the gear button
+  const settingsButton = document.querySelector('.ytp-settings-button');
+  settingsButton?.click();
+  await waitFor(1000);
 
-// We execute this script by making an entry in manifest.json file
-// under `content_scripts` property
+  // clicks the quality subMenu
+  const qualityButton = Array.from(document.querySelectorAll('.ytp-settings-menu .ytp-menuitem'))
+    .find(element => { 
+      const labelText = element.querySelector('.ytp-menuitem-label').textContent;
+      return labelText  === 'Qualità' || labelText === 'Quality'
+    });
+  qualityButton?.click();
+  await waitFor(1000);
 
-// For more information on Content Scripts,
-// See https://developer.chrome.com/extensions/content_scripts
-
-// Log `title` of current active web page
-const pageTitle = document.head.getElementsByTagName('title')[0].innerHTML;
-console.log(
-  `Page title is: '${pageTitle}' - evaluated by Chrome extension's 'contentScript.js' file`
-);
-
-// Communicate with background file by sending a message
-chrome.runtime.sendMessage(
-  {
-    type: 'GREETINGS',
-    payload: {
-      message: 'Hello, my name is Con. I am from ContentScript.',
-    },
-  },
-  response => {
-    console.log(response.message);
-  }
-);
-
-// Listen for message
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === 'COUNT') {
-    console.log(`Current count is ${request.payload.count}`);
-  }
-
-  // Send an empty response
-  // See https://github.com/mozilla/webextension-polyfill/issues/130#issuecomment-531531890
-  sendResponse({});
-  return true;
-});
+  // sets the lowest quality avaiable in the player
+  const qualities = Array.from(document.querySelectorAll('.ytp-quality-menu .ytp-menuitem'));
+  const lowestQuality = qualities.find(({textContent}) => textContent === '144p') ?? qualities.find(({textContent}) => textContent === '240p')
+  if(!lowestQuality?.hasAttribute('aria-checked'))
+    lowestQuality.click();
+  else
+    settingsButton?.click();
+}, 300000);

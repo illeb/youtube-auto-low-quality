@@ -1,21 +1,16 @@
-# <img src="public/icons/icon_48.png" width="45" align="left"> Youtube_auto_low_quality
+# <img src="public/icons/icon_48.png" width="45" align="left"> Youtube auto low quality
+## What?
 
-My Chrome Extension
+This extension that sets all the background youtube tabs at lowest quality. Yeah, that's it
 
-## Features
+## Why?
 
-- Feature 1
-- Feature 2
+If you are like me who likes to listen to music from youtube playlists when working connected to a mobile hotspot, you will have probably stumbled in *youtube that sets your playing video at maximum quality or 720p*.
 
-## Install
+This usually results in wasting large amount of your data in a video you aren't watching anyway.
 
-[**Chrome** extension]()
+## Huh?
 
-## Contribution
+goto *What* section and read it again.
 
-Suggestions and pull requests are welcomed!.
-
----
-
-This project was bootstrapped with [Chrome Extension CLI](https://github.com/dutiyesh/chrome-extension-cli)
 
