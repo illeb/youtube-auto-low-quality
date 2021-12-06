@@ -1,4 +1,5 @@
 async function setLowestQuality() {
+  try {
   // let's run the script only when the current youtube tab is in background, and the url is from youtube
   if(document.visibilityState === 'visible' || !/(https:\/\/www.youtube.com\/)+.*/g.test(document.URL))
     return;
@@ -25,6 +26,10 @@ async function setLowestQuality() {
     lowestQuality.click();
   else
     settingsButton?.click();
+  }
+  catch(ex) {
+    console.error(ex);
+  }
 }
 setLowestQuality();
-setInterval(setLowestQuality, 300000);
+setInterval(setLowestQuality, 180000);
